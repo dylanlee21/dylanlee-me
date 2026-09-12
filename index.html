@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dylan Lee — Engineering Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Archivo:wght@600;700;800&display=swap');
+
+  :root{
+    --bg: #0b0e13;
+    --surface: #12161f;
+    --surface-2: #171c27;
+    --border: #262e3d;
+    --text: #e7ebf3;
+    --text-dim: #8b93a7;
+    --text-faint: #565f74;
+    --accent: #5fd4c4;
+    --accent-dim: #2c5750;
+    --accent2: #f2a94e;
+    --green: #6fcf97;
+    --shadow: rgba(0,0,0,0.35);
+  }
+
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg: #f6f5f1;
+      --surface: #ffffff;
+      --surface-2: #f0efe9;
+      --border: #dcdad2;
+      --text: #1c2029;
+      --text-dim: #5b6172;
+      --text-faint: #9199a8;
+      --accent: #1f8f7c;
+      --accent-dim: #d7ece7;
+      --accent2: #b5720f;
+      --green: #2a8f5b;
+      --shadow: rgba(30,30,20,0.08);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg: #f6f5f1;
+    --surface: #ffffff;
+    --surface-2: #f0efe9;
+    --border: #dcdad2;
+    --text: #1c2029;
+    --text-dim: #5b6172;
+    --text-faint: #9199a8;
+    --accent: #1f8f7c;
+    --accent-dim: #d7ece7;
+    --accent2: #b5720f;
+    --green: #2a8f5b;
+    --shadow: rgba(30,30,20,0.08);
+  }
+  :root[data-theme="dark"]{
+    --bg: #0b0e13;
+    --surface: #12161f;
+    --surface-2: #171c27;
+    --border: #262e3d;
+    --text: #e7ebf3;
+    --text-dim: #8b93a7;
+    --text-faint: #565f74;
+    --accent: #5fd4c4;
+    --accent-dim: #2c5750;
+    --accent2: #f2a94e;
+    --green: #6fcf97;
+    --shadow: rgba(0,0,0,0.35);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    padding: 0 20px;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-attachment: fixed;
+    background-position: center;
+  }
+  body::before{
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 900px 500px at 50% -10%, var(--bg) 10%, transparent 70%),
+                linear-gradient(var(--bg), var(--bg));
+    opacity: 0.94;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .wrap{ max-width: 920px; margin: 0 auto; }
+
+  h1,h2,h3{ font-family: 'Archivo', system-ui, sans-serif; text-wrap: balance; margin: 0; }
+  code, .mono{ font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  .tabular{ font-variant-numeric: tabular-nums; }
+
+  a{ color: var(--accent); text-decoration: none; }
+  a:hover{ text-decoration: underline; }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* nav */
+  nav{
+    position: sticky; top: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .wrap > nav{ margin: 0 -20px; padding-left: 20px; padding-right: 20px; }
+  .brand{ font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; color: var(--text-dim); letter-spacing: 0.02em; }
+  .brand b{ color: var(--text); }
+  .navlinks{ display: flex; gap: 22px; font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; }
+  .navlinks a{ color: var(--text-dim); }
+  .navlinks a:hover{ color: var(--accent); text-decoration: none; }
+
+  /* hero */
+  .hero{ padding: 72px 0 48px; }
+  .eyebrow{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px;
+  }
+  .eyebrow .dot{ width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 25%, transparent); }
+  .hero h1{ font-size: clamp(2.1rem, 5.5vw, 3.4rem); line-height: 1.05; font-weight: 800; color: var(--accent); }
+  .hero .byline{ margin: 18px 0 0; font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--text); }
+  .hero .edu-line{
+    margin: 10px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.84rem;
+    color: var(--text-dim); line-height: 1.7; max-width: 62ch;
+  }
+  .hero .edu-line b{ color: var(--text); font-weight: 600; }
+  .hero p.lede{ margin: 22px 0 0; max-width: 62ch; color: var(--text-dim); font-size: 1.02rem; line-height: 1.6; }
+
+  .hero-links{ display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .hero-links a{
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem;
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 9px 14px; color: var(--text); display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface);
+  }
+  .hero-links a:hover{ border-color: var(--accent); color: var(--accent); text-decoration: none; }
+
+  /* stat strip */
+  .stats{
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; margin-top: 40px;
+  }
+  .stat{ background: var(--surface); padding: 18px 16px; }
+  .stat .n{ font-family: 'IBM Plex Mono', monospace; font-size: 1.5rem; font-weight: 600; color: var(--accent); }
+  .stat .l{ font-size: 0.74rem; color: var(--text-faint); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* section scaffolding */
+  section{ padding: 56px 0 8px; }
+  .section-head{ display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+  .section-num{ font-family: 'IBM Plex Mono', monospace; color: var(--text-faint); font-size: 0.85rem; }
+  .section-head h2{ font-size: 1.5rem; font-weight: 700; }
+  .section-rule{ flex: 1; height: 1px; background: var(--border); }
+  .section-subtitle{ font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; color: var(--accent); margin: 0 0 28px 30px; letter-spacing: 0.02em; }
+
+  /* project card */
+  .project{
+    border: 1px solid var(--border); border-radius: 12px; background: var(--surface);
+    padding: 26px 26px 24px; margin-bottom: 20px; box-shadow: 0 1px 2px var(--shadow);
+  }
+  .project-top{ display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .project-tag{ font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .project h3{ font-size: 1.25rem; font-weight: 700; }
+  .status{
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; padding: 4px 10px; border-radius: 20px;
+    white-space: nowrap; border: 1px solid transparent;
+  }
+  .status.live{ color: var(--green); background: color-mix(in srgb, var(--green) 14%, transparent); border-color: color-mix(in srgb, var(--green) 30%, transparent); }
+  .status.progress{ color: var(--accent2); background: color-mix(in srgb, var(--accent2) 14%, transparent); border-color: color-mix(in srgb, var(--accent2) 30%, transparent); }
+  .status.award{ color: var(--accent2); background: color-mix(in srgb, var(--accent2) 14%, transparent); border-color: color-mix(in srgb, var(--accent2) 30%, transparent); }
+
+  .project p.desc{ color: var(--text-dim); line-height: 1.65; margin: 14px 0 16px; max-width: 68ch; }
+
+  .feature-list{ list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; }
+  .feature-list li{ display: flex; gap: 10px; color: var(--text-dim); font-size: 0.93rem; line-height: 1.5; }
+  .feature-list li::before{ content: "▸"; color: var(--accent); flex: none; }
+
+  .stack{ display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+  .chip{
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem;
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim);
+    padding: 4px 9px; border-radius: 5px;
+  }
+
+  .project-links{ margin-top: 16px; display: flex; gap: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; }
+
+  .project-media{
+    margin-top: 4px; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; background: var(--surface-2);
+  }
+  .project-media img, .project-media video{ display: block; width: 100%; height: auto; }
+  .media-row{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 16px; }
+  .media-row .project-media{ margin: 0; }
+  .project-media-caption{
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--text-faint);
+    padding: 8px 12px; border-top: 1px solid var(--border); background: var(--surface);
+  }
+
+  /* coursework grid */
+  .course-grid{ display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-bottom: 8px; }
+  .course-card{ border: 1px solid var(--border); background: var(--surface); border-radius: 10px; padding: 18px 18px 16px; }
+  .course-card .code{ font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.06em; }
+  .course-card h4{ margin: 6px 0 8px; font-size: 1.02rem; font-family: 'Archivo', sans-serif; font-weight: 700; }
+  .course-card p{ margin: 0; color: var(--text-dim); font-size: 0.88rem; line-height: 1.55; }
+
+  /* footer / contact */
+  footer{ margin-top: 64px; padding: 40px 0 56px; border-top: 1px solid var(--border); }
+  .footer-grid{ display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
+  footer h2{ font-size: 1.6rem; }
+  footer p{ color: var(--text-dim); max-width: 46ch; line-height: 1.6; margin-top: 12px; }
+  .footer-links{ display: flex; gap: 12px; flex-wrap: wrap; }
+  .note{ margin-top: 34px; font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; color: var(--text-faint); }
+
+  @media (max-width: 640px){
+    .stats{ grid-template-columns: repeat(2, 1fr); }
+    .navlinks{ display: none; }
+    .hero{ padding-top: 44px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <nav>
+    <div class="brand"><b>DYLAN LEE</b> // eng</div>
+    <div class="navlinks">
+      <a href="#internship">Internship</a>
+      <a href="#projects">Projects</a>
+      <a href="#mech-projects">Mechanical</a>
+      <a href="#coursework">Coursework</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="eyebrow"><span class="dot"></span> OPEN TO INTERNSHIPS / ENGINEERING ROLES</div>
+    <h1>Engineering Portfolio</h1>
+    <p class="byline">Dylan Lee</p>
+    <p class="edu-line"><b>Arizona State University</b> — Ira A. Fulton Schools of Engineering, Tempe, AZ<br>B.S. Mechanical Engineering · GPA 3.6/4.0 · Expected May 2028 · Chandler, AZ</p>
+    <div class="hero-links">
+      <a href="mailto:dylanslee121@gmail.com">✉ dylanslee121@gmail.com</a>
+      <a href="https://github.com/dylanlee21" target="_blank" rel="noopener">↗ github.com/dylanlee21</a>
+      <a href="https://linkedin.com/in/dylanlee1" target="_blank" rel="noopener">↗ linkedin.com/in/dylanlee1</a>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="n tabular">4</div><div class="l">Shipped Projects</div></div>
+      <div class="stat"><div class="n tabular">3</div><div class="l">Deployed on Render</div></div>
+      <div class="stat"><div class="n tabular">2</div><div class="l">External APIs Integrated</div></div>
+      <div class="stat"><div class="n tabular">2</div><div class="l">Languages / Stacks</div></div>
+    </div>
+  </div>
+
+  <section id="internship">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>REV77 Internship</h2>
+      <span class="section-rule"></span>
+    </div>
+    <p class="section-subtitle">Solutions Engineer Intern</p>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <div class="project-tag">Client Analytics · Internal Tool</div>
+          <h3>Health Score Dashboard</h3>
+        </div>
+        <span class="status progress">In Progress</span>
+      </div>
+      <p class="desc">A scoring system that turns raw campaign data into a single Green/Yellow/Red health rating per client, so account managers can spot at-risk accounts before a client does. Pulls live metrics from TapClicks and delivery data from Asana into one composite score.</p>
+      <ul class="feature-list">
+        <li>Weighted scoring model — Campaign Performance 40%, Delivery/Execution 25%, Client Communication 20%, Strategic/Account Risk 15% — rolled into a 0–100 composite</li>
+        <li>Hybrid benchmarking: universal month-over-month trend scoring for every client, plus optional industry-specific benchmarks for verticals like legal, medical, and automotive</li>
+        <li>Built an auto-scoring pipeline — client discovery → metric pull → scoring → database upsert — end-to-end tested against live client data</li>
+        <li>Resolved data-integrity issues along the way: pagination bugs, type mismatches from TapClicks' string-formatted numbers, and placeholder scores masking missing data</li>
+      </ul>
+      <div class="stack">
+        <span class="chip">Node.js / Express</span>
+        <span class="chip">Supabase (PostgreSQL)</span>
+        <span class="chip">TapClicks API</span>
+        <span class="chip">Asana API</span>
+        <span class="chip">Render</span>
+      </div>
+      <div class="project-links"><a href="https://rev77-health-score.onrender.com" target="_blank" rel="noopener">↗ Live app</a></div>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <div class="project-tag">AI Content · Local News</div>
+          <h3>San Tan Family Pulse</h3>
+        </div>
+        <span class="status live">Live in Production</span>
+      </div>
+      <p class="desc">A fully autonomous weekly newsletter for East Valley Arizona (Gilbert, Chandler, Queen Creek, San Tan Valley) that researches, writes, and publishes itself — no human in the loop once it's scheduled.</p>
+      <ul class="feature-list">
+        <li>Runs on a cron schedule every Wednesday morning, generating that week's issue from scratch via the Claude API</li>
+        <li>Aggregates local events and listings from Eventbrite, Yelp, Ticketmaster, and Harkins/Cinemark APIs before writing</li>
+        <li>Renders finished issues to PDF and persists them to a PostgreSQL backend on Supabase</li>
+      </ul>
+      <div class="stack">
+        <span class="chip">Node.js + node-cron</span>
+        <span class="chip">Claude API</span>
+        <span class="chip">PostgreSQL</span>
+        <span class="chip">pdfkit</span>
+        <span class="chip">Render</span>
+      </div>
+      <div class="project-links"><a href="https://san-tan-family-pulse-hamy.onrender.com" target="_blank" rel="noopener">↗ Live app</a></div>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <div class="project-tag">Internal Tool</div>
+          <h3>Post-Campaign Reporting App</h3>
+        </div>
+        <span class="status progress">In Progress</span>
+      </div>
+      <p class="desc">Client reporting used to mean pulling numbers by hand from multiple platforms after every campaign. This app automates that: it pulls from internal databases and the external email marketing platforms REV77 runs campaigns on, then generates, stores, and lets the team browse finished reports from one dashboard.</p>
+      <div class="stack">
+        <span class="chip">Dashboard / CRUD</span>
+        <span class="chip">Internal DB integration</span>
+        <span class="chip">Email marketing platform API</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>Personal Projects</h2>
+      <span class="section-rule"></span>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <div class="project-tag">Sports Analytics · Solo Build</div>
+          <h3>FantasyEdge</h3>
+        </div>
+        <span class="status live">Live</span>
+      </div>
+      <p class="desc">A personal NFL fantasy football analytics dashboard, built to give myself an edge in drafting and weekly lineup decisions — and to teach myself web development from a standing start of zero, coming from a Python/MATLAB background. Rebuilt from an early Streamlit prototype into a full Dash application.</p>
+      <ul class="feature-list">
+        <li>Historical stats (2024–2025): QB/RB/WR/TE rankings with red zone share, opportunity share, YPRR, YBC/ATT, YAC/ATT, and boom/bust game-log coloring</li>
+        <li>2026 draft prep suite: overall and positional rankings, strength of schedule, a mock draft board built on FantasyPros PPR ADP, and a toggleable personal draft-notes section</li>
+        <li>Team Analytics tab — pass/run rate, red zone conversion, 3rd-down %, sacks allowed — rendered in an AG Grid with heat-map coloring</li>
+        <li>Coaching Changes tab tracking all 10 new 2026 head coaches as color-coded impact cards</li>
+      </ul>
+      <div class="stack">
+        <span class="chip">Python / Dash</span>
+        <span class="chip">dash-ag-grid</span>
+        <span class="chip">pandas</span>
+        <span class="chip">Render + gunicorn</span>
+      </div>
+      <div class="project-links"><a href="https://fantasy-edge-7y5o.onrender.com" target="_blank" rel="noopener">↗ Live app</a></div>
+    </div>
+  </section>
+
+  <section id="mech-projects">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2>Mechanical Engineering Projects</h2>
+      <span class="section-rule"></span>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <div class="project-tag">ASME Student Design Competition · Sept 2025 – Present</div>
+          <h3>Mechanical Design Team</h3>
+        </div>
+        <span class="status award">1st Place</span>
+      </div>
+      <p class="desc">Designed and modeled the physical competition environment — a makeshift city navigated by an autonomous robot to collect simulated trash units — placing 1st among competing university teams in a timed head-to-head competition.</p>
+      <ul class="feature-list">
+        <li>Designed and modeled map components in SolidWorks, building the physical environment the robot used to navigate and collect simulated trash units</li>
+        <li>Collaborated with a 4-member set-design team to assemble and construct the competition course, including physical testing and validation of the robot</li>
+      </ul>
+      <div class="stack">
+        <span class="chip">SolidWorks</span>
+        <span class="chip">CAD Modeling</span>
+        <span class="chip">Prototyping</span>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <div class="project-tag">4-Person Team · ASU · Fall 2024</div>
+          <h3>Autonomous Zoo Exhibit</h3>
+        </div>
+      </div>
+      <p class="desc">A 3D-printed and hand-crafted small-scale orangutan habitat with an autonomous, interactive attraction, built with a 4-member team.</p>
+      <div class="project-media">
+        <video src="zoo-exhibit-demo.mp4" controls playsinline preload="metadata"></video>
+        <div class="project-media-caption">Demo — the automated trapdoor and interactive buttons in action</div>
+      </div>
+      <div class="media-row">
+        <div class="project-media">
+          <img src="zoo-exhibit-build.png" alt="Finished autonomous zoo exhibit habitat, showing the front control panel with buttons and the wired interior with Arduino and trapdoor mechanism" loading="lazy">
+          <div class="project-media-caption">Finished build — control panel &amp; wired interior</div>
+        </div>
+        <div class="project-media">
+          <img src="zoo-exhibit-3dprints.png" alt="3D printed low-poly gorilla figure and banana prop for the exhibit" loading="lazy">
+          <div class="project-media-caption">3D-printed gorilla &amp; banana props</div>
+        </div>
+        <div class="project-media">
+          <img src="zoo-exhibit-tinkercad.png" alt="Tinkercad model of the autonomous zoo exhibit habitat, shown from interior, top-down, and rear panel views" loading="lazy">
+          <div class="project-media-caption">Tinkercad model</div>
+        </div>
+      </div>
+      <ul class="feature-list">
+        <li>Designed the habitat in Tinkercad and fabricated components through 3D printing and hand-crafted construction</li>
+        <li>Calculated model ratios and component dimensions to ensure proper fit for mechanical assembly and 3D printing</li>
+        <li>Programmed and integrated Arduino-controlled buttons and an automated trapdoor into a fully functional interactive system</li>
+      </ul>
+      <div class="stack">
+        <span class="chip">Tinkercad</span>
+        <span class="chip">3D Printing</span>
+        <span class="chip">Arduino</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="coursework">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2>Coursework</h2>
+      <span class="section-rule"></span>
+    </div>
+    <p style="color:var(--text-dim); margin: -14px 0 24px; max-width:62ch; line-height:1.6;">Selected mechanical engineering coursework that overlaps with the computational and analytical work above.</p>
+
+    <div class="course-grid">
+      <div class="course-card">
+        <div class="code">NUM. METHODS &amp; ODEs</div>
+        <h4>Numerical Methods &amp; Differential Equations</h4>
+        <p>RK4 and Euler methods (explicit/implicit), Heun's method, finite difference PDE schemes for heat and advection, Fourier analysis and DFT concepts.</p>
+      </div>
+      <div class="course-card">
+        <div class="code">DYNAMICS</div>
+        <h4>Rigid Body Kinematics</h4>
+        <p>Rolling constraints, instantaneous centers, and relative velocity equations for rigid body systems.</p>
+      </div>
+      <div class="course-card">
+        <div class="code">MSE 250</div>
+        <h4>Composite Materials</h4>
+        <p>Materials science fundamentals including the Griffith crack model, Rule of Mixtures for composites, and bonding theory.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="footer-grid">
+      <div>
+        <h2>Let's talk.</h2>
+        <p>Currently a junior studying mechanical engineering and open to internship and engineering opportunities.</p>
+      </div>
+      <div class="footer-links">
+        <a class="chip" href="mailto:dylanslee121@gmail.com" style="padding:9px 14px;">Email</a>
+        <a class="chip" href="https://github.com/dylanlee21" target="_blank" rel="noopener" style="padding:9px 14px;">GitHub</a>
+        <a class="chip" href="https://linkedin.com/in/dylanlee1" target="_blank" rel="noopener" style="padding:9px 14px;">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
