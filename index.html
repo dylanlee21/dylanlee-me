@@ -203,8 +203,27 @@
     overflow: hidden; background: var(--surface-2);
   }
   .project-media img, .project-media video{ display: block; width: 100%; height: auto; }
+  .project-media img{ cursor: zoom-in; transition: opacity 0.15s ease; }
+  .project-media img:hover{ opacity: 0.88; }
   .media-row{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 16px; }
   .media-row .project-media{ margin: 0; }
+
+  .lightbox{
+    position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center;
+    background: rgba(4,6,10,0.92); padding: 32px; cursor: zoom-out;
+  }
+  .lightbox.active{ display: flex; }
+  .lightbox img{
+    max-width: 100%; max-height: 100%; border-radius: 8px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5); cursor: default;
+  }
+  .lightbox-close{
+    position: fixed; top: 20px; right: 24px; z-index: 101;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--text);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 7px 12px; cursor: pointer;
+  }
+  .lightbox-close:hover{ border-color: var(--accent); color: var(--accent); }
   .project-media-caption{
     font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--text-faint);
     padding: 8px 12px; border-top: 1px solid var(--border); background: var(--surface);
@@ -499,6 +518,45 @@
   </footer>
 
 </div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" type="button">✕ Close</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  (function(){
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = document.getElementById('lightbox-img');
+
+    function openLightbox(img){
+      lightboxImg.src = img.currentSrc || img.src;
+      lightboxImg.alt = img.alt || '';
+      lightbox.classList.add('active');
+    }
+    function closeLightbox(){
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+    }
+
+    document.querySelectorAll('.project-media img').forEach(function(img){
+      img.setAttribute('tabindex', '0');
+      img.setAttribute('role', 'button');
+      img.addEventListener('click', function(){ openLightbox(img); });
+      img.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLightbox(img); }
+      });
+    });
+
+    lightbox.addEventListener('click', function(e){
+      if(e.target === lightbox){ closeLightbox(); }
+    });
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape'){ closeLightbox(); }
+    });
+  })();
+</script>
 
 </body>
 </html>
